@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ShinyMap</title>
+  <meta charset="utf-8">
+  <meta name="description" content="ShinyMap">
+  <meta name="author" content="Eric Fan">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/tomorrow.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  <link rel=stylesheet href="./assets/css/ribbons.css"></link>
+
+  
+  <!-- Grab CDN jQuery, fall back to local if offline -->
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+  <script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery.js"><\/script>')</script> 
+  <script data-main="libraries/frameworks/io2012/js/slides" 
+    src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  </script>
+  
+  
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+        <slide class="title-slide segue nobackground">
+  <hgroup class="auto-fadein">
+    <h1>ShinyMap</h1>
+    <h2>Data product developement course project</h2>
+    <p>Eric Fan<br/>Engineer</p>
+  </hgroup>
+  <article></article>  
+</slide>
+    
+
+    <!-- SLIDES -->
+    <slide class="" id="slide-1" style="background:;">
+  <article data-timings="">
+    <!-- Limit image width and height -->
+
+<style type='text/css'>
+img {
+    max-height: 672px;
+    max-width: 1156px;
+}
+</style>
+
+<!-- Center image on slide -->
+
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+
+<script type='text/javascript'>
+$(function() {
+    $("p:has(img)").addClass('centered');
+});
+</script>
+
+<h2>About ShinyMap</h2>
+
+<ul>
+<li>What is ShinyMap?<br>
+A simple API that allow user to do a quick search on google map.</li>
+<li>Where is ShinyMap?<br>
+You can ifnd ShinyMap at <a href="http://hipporz.shinyapps.io/ShinyMap/">ShinyMap</a><br></li>
+<li>Input<br>
+A description of the location, it could be zip code, city name or detailed address.<br>
+A number indicating the level of zoom.</li>
+<li>Output<br>
+The google map in response to the search.</li>
+<li>Source<br>
+This App is built with the shiny package in R.<br>
+Packages ggmap and ggplot2 are also used.</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="class" id="id" style="background:;">
+  <hgroup>
+    <h2>Search location</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Enter &#39;Chicago&#39; and hit search</p>
+
+<p><img src="/Users/eric/Downloads/ShinyMap%20slides/assets/img/map1.png" alt="map1"></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-3" style="background:;">
+  <hgroup>
+    <h2>zooming</h2>
+  </hgroup>
+  <article data-timings="">
+    <p>Adjust zoom value from 10(default) to 15.</p>
+
+<p><img src="assets/img/map2.png" alt="map1"></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-4" style="background:;">
+  <hgroup>
+    <h2>Source Code--ui.R</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">library(shiny)
+library(ggmap)
+shinyUI(fluidPage(
+  titlePanel(&quot;Shiny Map&quot;),
+  sidebarLayout (
+    sidebarPanel(
+           textInput(&quot;address&quot;,label=h3(&quot;Location&quot;),
+                     value=&quot;&quot; ),          
+           submitButton(&quot;Search&quot;),
+           sliderInput(&quot;zoom&quot;,label=h3(&quot;zoom&quot;),
+                       min=5,max=20,value=10)
+      ),
+
+    mainPanel(
+      plotOutput(&quot;map&quot;,width=&quot;800px&quot;,height=&quot;800px&quot;)
+      )  
+  )))
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+<slide class="" id="slide-5" style="background:;">
+  <hgroup>
+    <h2>Source Code--server.R</h2>
+  </hgroup>
+  <article data-timings="">
+    <pre><code class="r">library(shiny)
+library(ggplot2)
+library(ggmap)
+
+shinyServer(function(input, output) {
+  output$map&lt;-renderPlot({
+
+      getMap&lt;-get_map(input$address,zoom=input$zoom)
+      ggmap(getMap,extent=&quot;panel&quot;)  
+})
+})
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+    <slide class="backdrop"></slide>
+  </slides>
+  <div class="pagination pagination-small" id='io2012-ptoc' style="display:none;">
+    <ul>
+      <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=1 title=''>
+         1
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=2 title='Search location'>
+         2
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=3 title='zooming'>
+         3
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=4 title='Source Code--ui.R'>
+         4
+      </a>
+    </li>
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=5 title='Source Code--server.R'>
+         5
+      </a>
+    </li>
+  </ul>
+  </div>  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+  <!-- Load Javascripts for Widgets -->
+  
+  <!-- LOAD HIGHLIGHTER JS FILES -->
+  <script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <!-- DONE LOADING HIGHLIGHTER JS FILES -->
+   
+  </html>
